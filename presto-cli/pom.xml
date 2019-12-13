@@ -14,7 +14,31 @@
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
         <main-class>com.facebook.presto.cli.Presto</main-class>
+        <hyperapi-version>0.8953</hyperapi-version>
+        <hyperapi-jna-version>5.2.0</hyperapi-jna-version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <properties>
+                <hyperAPI-import>com.tableau</hyperAPI-import>
+                <tableau_prefix>hyper.mac</tableau_prefix>
+                <system>darwin</system>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>linux</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <tableau_prefix>hyper.linux</tableau_prefix>
+                <system>linux</system>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -105,10 +129,59 @@
             <artifactId>mockwebserver</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>${tableau_prefix}.com.tableau</groupId>
+            <artifactId>hyperapi</artifactId>
+            <version>${hyperapi-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${tableau_prefix}</groupId>
+            <artifactId>${system}</artifactId>
+            <version>${hyperapi-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${tableau_prefix}.com.sun.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${hyperapi-jna-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${tableau_prefix}.com.tableau</groupId>
+            <artifactId>hyperapi_doc</artifactId>
+            <version>${hyperapi-version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.airlift/configuration -->
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>configuration</artifactId>
+            <version>0.165</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <!-- Ignore dependency check for below modules and include them anyway -->
+                        <configuration>
+                            <ignoredDependencies>
+                                <ignoredDependency>${tableau_prefix}:${system}:jar:${hyperapi-version}</ignoredDependency>
+                                <ignoredDependency>${tableau_prefix}.com.sun.jna:jna:jar:${hyperapi-jna-version}</ignoredDependency>
+                                <ignoredDependency>${tableau_prefix}.com.tableau:hyperapi_doc:jar:${hyperapi-version}</ignoredDependency>
+                            </ignoredDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

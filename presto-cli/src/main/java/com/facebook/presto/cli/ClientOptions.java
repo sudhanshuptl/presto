@@ -116,7 +116,7 @@ public class ClientOptions
     @Option(name = "--execute", title = "execute", description = "Execute specified statements and exit")
     public String execute;
 
-    @Option(name = "--output-format", title = "output-format", description = "Output format for batch mode [ALIGNED, VERTICAL, CSV, TSV, CSV_HEADER, TSV_HEADER, NULL] (default: CSV)")
+    @Option(name = "--output-format", title = "output-format", description = "Output format for batch mode [ALIGNED, VERTICAL, CSV, TSV, CSV_HEADER, TSV_HEADER, NULL, HYPER] (default: CSV)")
     public OutputFormat outputFormat = OutputFormat.CSV;
 
     @Option(name = "--resource-estimate", title = "resource-estimate", description = "Resource estimate (property can be used multiple times; format is key=value)")
@@ -140,6 +140,9 @@ public class ClientOptions
     @Option(name = "--ignore-errors", title = "ignore errors", description = "Continue processing in batch mode when an error occurs (default is to exit immediately)")
     public boolean ignoreErrors;
 
+    @Option(name = { "--hyperfile"}, title = "hyperfile", description = "Location to write to when using  HYPER output")
+    public String hyperfile;
+
     public enum OutputFormat
     {
         ALIGNED,
@@ -148,6 +151,7 @@ public class ClientOptions
         TSV,
         CSV_HEADER,
         TSV_HEADER,
+        HYPER,
         NULL
     }
 
@@ -171,6 +175,15 @@ public class ClientOptions
                 toExtraCredentials(extraCredentials),
                 null,
                 clientRequestTimeout);
+    }
+
+    public TableauConfig toTableauConfig()
+    {
+        TableauConfig config = new TableauConfig();
+        if (hyperfile != null) {
+            config.setExtractName(hyperfile);
+        }
+        return config;
     }
 
     public static URI parseServer(String server)

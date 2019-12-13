@@ -86,6 +86,7 @@ public class Console
         ClientSession session = clientOptions.toClientSession();
         boolean hasQuery = !isNullOrEmpty(clientOptions.execute);
         boolean isFromFile = !isNullOrEmpty(clientOptions.file);
+        TableauConfig tableauConfig = clientOptions.toTableauConfig();
 
         if (!hasQuery && !isFromFile) {
             AnsiConsole.systemInstall();
@@ -138,7 +139,8 @@ public class Console
                 Optional.ofNullable(clientOptions.krb5ConfigPath),
                 Optional.ofNullable(clientOptions.krb5KeytabPath),
                 Optional.ofNullable(clientOptions.krb5CredentialCachePath),
-                !clientOptions.krb5DisableRemoteServiceHostnameCanonicalization)) {
+                !clientOptions.krb5DisableRemoteServiceHostnameCanonicalization,
+                tableauConfig)) {
             if (hasQuery) {
                 return executeCommand(queryRunner, query, clientOptions.outputFormat, clientOptions.ignoreErrors);
             }

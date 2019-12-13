@@ -4,6 +4,16 @@ Presto is a distributed SQL query engine for big data.
 
 See the [User Manual](https://prestodb.github.io/docs/current/) for deployment instructions and end user documentation.
 
+# [What's New Here](https://github.com/sudhanshuptl/presto/tree/master/presto-cli)
+Presto is great tool, That is why lots of data oriented people use this. <br />
+I came across a situation to use data from presto and send it to tableau for further analysis purposes. <br />
+`Tableau` provide very unique way of input data for lighting fast processing and analyzing i.e `hyper`file. <br />
+So We customised `presto-cli` to export Query output as `.hyper` file that we can directly send to tableau. <br />
+
+We are using `tableau Hyper API` instead of `tableau Extract 2.0` to convert Query Output into `hyper` file as per our current 
+results performance of conversion is improved upto >3x . <br />
+[Checkout presto-cli with hyper export support](https://github.com/sudhanshuptl/presto/tree/master/presto-cli)
+
 ## Requirements
 
 * Mac OS X or Linux

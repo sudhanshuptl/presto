@@ -14,6 +14,7 @@
 package com.facebook.presto.cli;
 
 import com.facebook.presto.cli.ClientOptions.OutputFormat;
+import com.facebook.presto.client.ClientTypeSignature;
 import com.facebook.presto.client.Column;
 import com.facebook.presto.client.ErrorLocation;
 import com.facebook.presto.client.QueryError;
@@ -58,11 +59,13 @@ public class Query
     private final AtomicBoolean ignoreUserInterrupt = new AtomicBoolean();
     private final StatementClient client;
     private final boolean debug;
+    private static TableauConfig tableauConfig;
 
-    public Query(StatementClient client, boolean debug)
+    public Query(StatementClient client, boolean debug, TableauConfig tableauConfig)
     {
         this.client = requireNonNull(client, "client is null");
         this.debug = debug;
+        this.tableauConfig = tableauConfig;
     }
 
     public Optional<String> getSetCatalog()
@@ -244,21 +247,23 @@ public class Query
             throws IOException
     {
         List<String> fieldNames = Lists.transform(columns, Column::getName);
+        List<ClientTypeSignature> fieldSignatures = Lists.transform(columns, Column::getTypeSignature);
+        List<String> fieldTypes = Lists.transform(fieldSignatures, ClientTypeSignature::getRawType);
         if (interactive) {
-            pageOutput(format, fieldNames);
+            pageOutput(format, fieldNames, fieldTypes);
         }
         else {
-            sendOutput(out, format, fieldNames);
+            sendOutput(out, format, fieldNames, fieldTypes);
         }
     }
 
-    private void pageOutput(OutputFormat format, List<String> fieldNames)
+    private void pageOutput(OutputFormat format, List<String> fieldNames, List<String> fieldTypes)
             throws IOException
     {
         try (Pager pager = Pager.create();
                 ThreadInterruptor clientThread = new ThreadInterruptor();
                 Writer writer = createWriter(pager);
-                OutputHandler handler = createOutputHandler(format, writer, fieldNames)) {
+                OutputHandler handler = createOutputHandler(format, writer, fieldNames, fieldTypes)) {
             if (!pager.isNullPager()) {
                 // ignore the user pressing ctrl-C while in the pager
                 ignoreUserInterrupt.set(true);
@@ -278,20 +283,20 @@ public class Query
         }
     }
 
-    private void sendOutput(PrintStream out, OutputFormat format, List<String> fieldNames)
+    private void sendOutput(PrintStream out, OutputFormat format, List<String> fieldNames, List<String> fieldTypes)
             throws IOException
     {
-        try (OutputHandler handler = createOutputHandler(format, createWriter(out), fieldNames)) {
+        try (OutputHandler handler = createOutputHandler(format, createWriter(out), fieldNames, fieldTypes)) {
             handler.processRows(client);
         }
     }
 
-    private static OutputHandler createOutputHandler(OutputFormat format, Writer writer, List<String> fieldNames)
+    private static OutputHandler createOutputHandler(OutputFormat format, Writer writer, List<String> fieldNames, List<String> fieldTypes)
     {
-        return new OutputHandler(createOutputPrinter(format, writer, fieldNames));
+        return new OutputHandler(createOutputPrinter(format, writer, fieldNames, fieldTypes));
     }
 
-    private static OutputPrinter createOutputPrinter(OutputFormat format, Writer writer, List<String> fieldNames)
+    private static OutputPrinter createOutputPrinter(OutputFormat format, Writer writer, List<String> fieldNames, List<String> fieldTypes)
     {
         switch (format) {
             case ALIGNED:
@@ -306,6 +311,8 @@ public class Query
                 return new TsvPrinter(fieldNames, writer, false);
             case TSV_HEADER:
                 return new TsvPrinter(fieldNames, writer, true);
+            case HYPER:
+                return new HyperPrinter(fieldNames, fieldTypes, tableauConfig);
             case NULL:
                 return new NullPrinter();
         }
