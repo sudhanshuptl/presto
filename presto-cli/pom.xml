@@ -105,6 +105,19 @@
             <artifactId>mockwebserver</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>hyper.mac.com.tableau</groupId>
+            <artifactId>hyperapi</artifactId>
+            <version>0.8953</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.airlift/configuration -->
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>configuration</artifactId>
+            <version>0.165</version>
+        </dependency>
+
     </dependencies>
 
     <build>

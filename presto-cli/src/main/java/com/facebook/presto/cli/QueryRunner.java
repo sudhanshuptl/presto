@@ -46,6 +46,7 @@ public class QueryRunner
     private final boolean debug;
     private final OkHttpClient httpClient;
     private final Consumer<OkHttpClient.Builder> sslSetup;
+    private final TableauConfig tableauConfig;
 
     public QueryRunner(
             ClientSession session,
@@ -64,10 +65,12 @@ public class QueryRunner
             Optional<String> kerberosConfigPath,
             Optional<String> kerberosKeytabPath,
             Optional<String> kerberosCredentialCachePath,
-            boolean kerberosUseCanonicalHostname)
+            boolean kerberosUseCanonicalHostname,
+            TableauConfig tableauConfig)
     {
         this.session = new AtomicReference<>(requireNonNull(session, "session is null"));
         this.debug = debug;
+        this.tableauConfig = tableauConfig;
 
         this.sslSetup = builder -> setupSsl(builder, keystorePath, keystorePassword, truststorePath, truststorePassword);
 
@@ -115,7 +118,7 @@ public class QueryRunner
 
     public Query startQuery(String query)
     {
-        return new Query(startInternalQuery(session.get(), query), debug);
+        return new Query(startInternalQuery(session.get(), query), debug, tableauConfig);
     }
 
     public StatementClient startInternalQuery(String query)
