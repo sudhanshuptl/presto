@@ -195,6 +195,7 @@ public class HyperPrinter
         System.out.println("The connection to the Hyper file has been closed");
 
         // Stop HyperProcess Server
-        System.out.println("The Hyper process has been shut down");
+        hyperProcess.close();
+        System.out.println("Hyper process has been shut down :)");
     }
 }
