@@ -11,6 +11,20 @@ So We customised `presto-cli` to export Query output as `.hyper` file that we ca
 We are using `tableau Hyper API` instead of `tableau Extract 2.0` to convert Query Output into `hyper` file as per our current 
 results performance of conversion is improved upto >3x .
 
+# How I can try this new feature without much effort.
+It is always better to tryout new functionality before goig into setup and details, So We build a docker image for that.
+Steps:
+1. Start Docker Engine in your system.
+2. pull latest docker image : 
+`make pull` 
+or `docker pull docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest`.
+3. Run docker bash terminal : 
+`make run` 
+or `docker run -it --rm --entrypoint /bin/bash docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest`.
+4. execute your command
+ `presto-cli --server <server> --catalog <catalog> --schema <schema> --output-format "HYPER" --hyperfile <Output.hyper> --user <user@domain.com> --execute <"select * from my_table limit 10"> --password`
+     
+
 
 # Why Manual setup Required.
 Since Tableau hyper API is not available in maven repository , so we need to setup them in our local cache.<br/>
