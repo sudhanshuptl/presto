@@ -26,7 +26,7 @@ or `docker run -it --rm --entrypoint /bin/bash docker.pkg.github.com/sudhanshupt
      
 
 
-# Why Manual setup Required.
+# Why Manual setup Required ?
 Since Tableau hyper API is not available in maven repository , so we need to setup them in our local cache.<br/>
 Make sure to put `hyperAPI dependent binaries` withing the same directory as of executable jars.
     * You can setup Your personal maven repository to minimise manual setup.
