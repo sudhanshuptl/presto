@@ -2,7 +2,7 @@
 The Presto CLI provides a terminal-based interactive shell for running queries. The CLI is a self-executing JAR file,
  which means it acts like a normal UNIX executable. <br/>
 
-# What's New Here
+# What's New Here ?
 Presto is great tool, That is why lots of data oriented people use this. <br />
 I came across a situation to use data from presto and send it to tableau for further analysis purposes. <br />
 `Tableau` provide very unique way of input data for lighting fast processing and analyzing i.e `hyper`file. <br />
@@ -11,7 +11,7 @@ So We customised `presto-cli` to export Query output as `.hyper` file that we ca
 We are using `tableau Hyper API` instead of `tableau Extract 2.0` to convert Query Output into `hyper` file as per our current 
 results performance of conversion is improved upto >3x .
 
-# How I can try this new feature without much effort.
+# How I can try this new feature without much effort ?
 It is always better to tryout new functionality before goig into setup and details, So We build a docker image for that.
 Steps:
 1. Start Docker Engine in your system.
