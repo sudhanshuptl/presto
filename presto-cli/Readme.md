@@ -2,7 +2,7 @@
 The Presto CLI provides a terminal-based interactive shell for running queries. The CLI is a self-executing JAR file,
  which means it acts like a normal UNIX executable. <br/>
 
-# What's New Here
+# What's New Here ?
 Presto is great tool, That is why lots of data oriented people use this. <br />
 I came across a situation to use data from presto and send it to tableau for further analysis purposes. <br />
 `Tableau` provide very unique way of input data for lighting fast processing and analyzing i.e `hyper`file. <br />
@@ -11,8 +11,23 @@ So We customised `presto-cli` to export Query output as `.hyper` file that we ca
 We are using `tableau Hyper API` instead of `tableau Extract 2.0` to convert Query Output into `hyper` file as per our current 
 results performance of conversion is improved upto >3x .
 
+# How I can try this new feature without much effort ?
+It is always better to tryout new functionality before goig into setup and details, So We build a docker image for that.
+Steps:
+1. Start Docker Engine in your system.
+2. pull latest docker image : 
+`make pull` 
+or `docker pull docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest`.
+3. Run docker bash terminal : 
+`make run` 
+or `docker run -it --rm --entrypoint /bin/bash docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest`.
+4. execute your command
+ `presto-cli --server <<server-address>> --catalog <<catalog>> --schema <<schema>> --output-format "HYPER" --hyperfile <<Output.hyper>> --user <<user@domain.com>> --execute <<"select * from my_table limit 10">> --password`
+5. After Successfull execution you can find `Output.hyper` file at your current location.
+     
 
-# Why Manual setup Required.
+
+# Why Manual setup Required ?
 Since Tableau hyper API is not available in maven repository , so we need to setup them in our local cache.<br/>
 Make sure to put `hyperAPI dependent binaries` withing the same directory as of executable jars.
     * You can setup Your personal maven repository to minimise manual setup.
