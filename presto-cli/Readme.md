@@ -22,7 +22,8 @@ or `docker pull docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest
 `make run` 
 or `docker run -it --rm --entrypoint /bin/bash docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest`.
 4. execute your command
- `presto-cli --server <server> --catalog <catalog> --schema <schema> --output-format "HYPER" --hyperfile <Output.hyper> --user <user@domain.com> --execute <"select * from my_table limit 10"> --password`
+ `presto-cli --server <<server-address>> --catalog <<catalog>> --schema <<schema>> --output-format "HYPER" --hyperfile <<Output.hyper>> --user <<user@domain.com>> --execute <<"select * from my_table limit 10">> --password`
+5. After Successfull execution you can find `Output.hyper` file at your current location.
      
 
 
