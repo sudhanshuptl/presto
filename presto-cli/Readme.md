@@ -11,6 +11,18 @@ So We customised `presto-cli` to export Query output as `.hyper` file that we ca
 We are using `tableau Hyper API` instead of `tableau Extract 2.0` to convert Query Output into `hyper` file as per our current 
 results performance of conversion is improved upto >3x .
 
+# Why I should Use presto-cli to Export data as Tableau Hyper ?
+As We know Tableau Performance for analaysing data in `Hyper` formate is lighting fast, so If We are dealing with realy large data, then its better to Convert our result in hyper before sending to tableau. <br>
+Now Why Use presto-cli to export data in Hyper.
+1. Performance of Java/C++ is much better than any other programing launagauge for this process (Checkout the graph)
+![Presto-Hyper-Performance](https://github.com/sudhanshuptl/presto/blob/master/presto-cli/performance.png)
+2. We can save overhead time and memory for keeping the results, then convert into hyper. using presto-cli we can convert result in batches and whenever availabe So no need to keep results in memory (as it will be huge trouble if data is too big).
+3. Presto-cli is highly optimised to be use as presto client
+4. presto-cli recieve data in batches so presto-cli can convert the recieved data into hyper before recieveing for next batch so basically presto query processing and hyper conversion is going on almost parallael state.
+5. As of my personal practical experince performance for queries with large output is increase by max `3x`.
+
+
+
 # How I can try this new feature without much effort ?
 It is always better to tryout new functionality before goig into setup and details, So We build a docker image for that.
 Steps:
