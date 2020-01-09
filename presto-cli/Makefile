@@ -1,8 +1,8 @@
-DOCKER_TAG="docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper:latest"
+DOCKER_TAG="docker.pkg.github.com/sudhanshuptl/presto/presto-to-hyper"
 
 .PHONY: all run deploy
 
-all: build
+#all: build
 
 login:
 	docker login docker.pkg.github.com --username sudhanshuptl
@@ -14,9 +14,13 @@ build: Dockerfile
 	# Unzip download
 	# mv ./extract-folder/lib/hyper .
 	docker build -t ${DOCKER_TAG} .
-
+	docker tag ${DOCKER_TAG} ${DOCKER_TAG}:latest
 pull:
-	docker pull $(DOCKER_TAG)
+	docker pull ${DOCKER_TAG}
+
+run:
+	docker pull ${DOCKER_TAG}
+	docker run -it --rm --entrypoint /bin/bash ${DOCKER_TAG}
 
 deploy:
 	docker push $(DOCKER_TAG)
